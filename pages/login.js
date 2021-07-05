@@ -1,6 +1,26 @@
 import Link from 'next/link';
+import Joi from "joi-browser";
+import useForm from '../components/utils/useForm';
 
 const Login = () => {
+    const schema = {
+        email: Joi.string().email()
+            .required().label("User name or Email"),
+        password: Joi.string().required().min(6).label("Password"),
+    };
+
+    const { data, renderInput, renderButton, validateSubmit } = useForm({
+        schema,
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateSubmit(e)) {
+            // onSubmit(data);
+            console.log(data);
+        }
+    };
+
     return (
         <div className="absolute w-full h-full bg-red-50 overflow-hidden" >
             <div className="max-w-full md:max-w-4xl mx-auto mt-4 md:mt-10 shadow-2xl overflow-hidden">
@@ -26,25 +46,11 @@ const Login = () => {
                             <div className="text-base md:text-xl text-center text-gray-900 uppercase dark:text-gray-400">login with email</div>
                             <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
                         </div>
-                        <form >
-                            <div className="mt-2">
-                                <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="LoggingEmailAddress">User name or Email</label>
-                                <input id="LoggingEmailAddress" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="email" />
-                            </div>
-
-                            <div className="mt-2">
-                                <div className="flex justify-between">
-                                    <label className="block ext-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="loggingPassword">Password</label>
-                                    <span className="text-xs text-gray-500 dark:text-gray-300 hover:underline"><Link href="/dashboard"> Forget Password ? </Link></span>
-                                </div>
-
-                                <input id="loggingPassword" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" type="password" />
-                            </div>
-
-                            <div className="mt-8">
-                                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-                                    Login
-                                </button>
+                        <form onSubmit={handleSubmit}>
+                            {renderInput("email", "User name or Email", "email")}
+                            {renderInput("password", "Password", "password")}
+                            <div className="mt-4 md:mt-8">
+                                {renderButton("Login")}
                             </div>
                         </form>
 
@@ -56,7 +62,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
     );
 }
 

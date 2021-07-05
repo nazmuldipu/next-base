@@ -1,6 +1,29 @@
 import Link from 'next/link';
+import Joi from "joi-browser";
+import useForm from '../components/utils/useForm';
 
 const Register = () => {
+    const schema = {
+        name: Joi.string().min(2).required().label("Name"),
+        phone: Joi.string().required().regex(/^01[3-9][ ]?[0-9]{2}[ ]?[0-9]{3}[ ]?[0-9]{3}$/, "Phone").label("Phone number"),
+        email: Joi.string().email({ minDomainAtoms: 2 }).required().label("Email"),
+        password: Joi.string().min(6).required().label("Password"),
+        password_confirmation: Joi.string().min(6).required().label("Confirm Password"),
+    };
+
+    const { data, renderInput, renderButton, validateSubmit } = useForm({
+        schema,
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateSubmit(e)) {
+            // onSubmit(data);
+            console.log(data);
+        }
+    };
+
+
     return (<div className="absolute w-full h-full bg-red-50 overflow-hidden" >
         <div className="max-w-full md:max-w-4xl mx-auto mt-4 md:mt-10 shadow-2xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 h-full">
@@ -25,36 +48,17 @@ const Register = () => {
                         <div className="text-base md:text-xl text-center text-gray-900 uppercase dark:text-gray-400">register with email</div>
                         <span className="w-1/6 border-b dark:border-gray-400"></span>
                     </div>
-                    <form >
-                        <div className="mt-2">
-                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="name">Name</label>
-                            <input type="text" id="name" name="name" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-                        <div className="mt-2">
-                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-                        <div className="mt-2">
-                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="email">User name or Email</label>
-                            <input type="email" id="email" name="email" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-
-                        <div className="mt-2">
-                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-                        <div className="mt-2">
-                            <label className="block text-sm font-medium text-gray-600 dark:text-gray-200" htmlFor="password_confirmation">Password Confirmation</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" className="block w-full px-4 py-1 md:py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-                        </div>
-
-                        <div className="mt-8">
-                            <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-                                Register
-                            </button>
+                    <form onSubmit={handleSubmit}>
+                        {renderInput("name", "Name*")}
+                        {renderInput("phone", "Phone*")}
+                        {renderInput("email", "User name or Email*", "email")}
+                        {renderInput("password", "Password*", "password")}
+                        {renderInput("password_confirmation", "Confirm Password*", "password")}
+                        <div className="mt-4 md:mt-8">
+                            {renderButton("Login")}
                         </div>
                     </form>
-
+                    
                     <div className="flex items-center justify-between mt-2">
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                         <span className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"><Link href="/login"> or login </Link></span>
