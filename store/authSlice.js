@@ -22,9 +22,6 @@ const slice = createSlice({
             localStorage.setItem(tokenKey, auth.token);
             localStorage.setItem(userKey, JSON.stringify(auth.user));
         },
-        userRegister: (auth, action) => {
-            auth.loading = false;
-        },
         loggedOut: (auth, action) => {
             auth.token = "";
             auth.error = "";
@@ -43,7 +40,7 @@ const slice = createSlice({
     }
 })
 
-export const { loggedIn, userRegister, loggedOut, apiRequested, apiRequestFailed } = slice.actions;
+export const { loggedIn, loggedOut, apiRequested, apiRequestFailed } = slice.actions;
 
 //Action creators
 const loginUrl = "/login/student";
@@ -63,7 +60,7 @@ export const register = (data) => apiCallBegan({
     method: 'post',
     data,
     onStart: apiRequested.type,
-    onSuccess: userRegister.type,
+    onSuccess: loggedIn.type,
     onError: apiRequestFailed.type
 })
 

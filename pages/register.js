@@ -1,8 +1,22 @@
+import { useEffect } from 'react'
+import Router from 'next/router'
 import Link from 'next/link';
 import Joi from "joi-browser";
 import useForm from '../components/utils/useForm';
+import { useDispatch, useSelector } from "react-redux";
+import { register, getErrorMessage } from '../store/authSlice';
 
 const Register = () => {
+    const dispatch = useDispatch();
+    const error = useSelector((state) => getErrorMessage(state));
+    const token = useSelector((state) => state.auth.token);
+
+    useEffect(() => {
+        if (token) {
+            Router.push(`/dashboard`)
+        }
+    }, [token])
+
     const schema = {
         name: Joi.string().min(2).required().label("Name"),
         phone: Joi.string().required().regex(/^01[3-9][ ]?[0-9]{2}[ ]?[0-9]{3}[ ]?[0-9]{3}$/, "Phone").label("Phone number"),
@@ -18,8 +32,7 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateSubmit(e)) {
-            // onSubmit(data);
-            console.log(data);
+            dispatch(register(data));
         }
     };
 
@@ -50,6 +63,7 @@ const Register = () => {
                         <div className="text-base md:text-xl text-center text-gray-900 uppercase dark:text-gray-400">register with email</div>
                         <span className="w-1/6 border-b dark:border-gray-400"></span>
                     </div>
+                    <div className="text-sm font-bold text-red-500">{error}</div>
                     <form onSubmit={handleSubmit}>
                         {renderInput("name", "Name*")}
                         {renderInput("phone", "Phone*")}
@@ -57,7 +71,7 @@ const Register = () => {
                         {renderInput("password", "Password*", "password")}
                         {renderInput("password_confirmation", "Confirm Password*", "password")}
                         <div className="mt-4 md:mt-8">
-                            {renderButton("Login")}
+                            {renderButton("Register")}
                         </div>
                     </form>
 
