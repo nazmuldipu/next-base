@@ -10,6 +10,7 @@ const Register = () => {
     const dispatch = useDispatch();
     const error = useSelector((state) => getErrorMessage(state));
     const token = useSelector((state) => state.auth.token);
+    const busy = useSelector((state) => state.auth.loading);
 
     useEffect(() => {
         if (token) {
@@ -71,7 +72,7 @@ const Register = () => {
                         {renderInput("password", "Password*", "password")}
                         {renderInput("password_confirmation", "Confirm Password*", "password")}
                         <div className="mt-4 md:mt-8">
-                            {renderButton("Register")}
+                            {renderButton("Register", busy)}
                         </div>
                     </form>
 

@@ -10,11 +10,12 @@ const Login = () => {
     const dispatch = useDispatch();
     const error = useSelector((state) => getErrorMessage(state));
     const token = useSelector((state) => state.auth.token);
+    const busy = useSelector((state) => state.auth.loading);
 
     useEffect(() => {
         if (!token) {
-            getToken(dispatch)            
-        } else{
+            getToken(dispatch)
+        } else {
             Router.push(`/dashboard`)
         }
     }, [token])
@@ -68,7 +69,7 @@ const Login = () => {
                             {renderInput("email", "User name or Email", "email")}
                             {renderInput("password", "Password", "password")}
                             <div className="mt-4 md:mt-8">
-                                {renderButton("Login")}
+                                {renderButton("Login", busy)}
                             </div>
                         </form>
 
