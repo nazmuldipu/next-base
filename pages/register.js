@@ -32,15 +32,17 @@ const Register = () => {
                 </div>
                 <div className="w-full bg-white p-4 md:p-8">
                     <div className="grid grid-flow-col auto-cols-max">
-                        <a href="/" className="inline-block">
-                            <span className="sr-only">Workflow</span>
-                            <img
-                                className="h-8 w-auto sm:h-10"
-                                src="logo.svg"
-                                alt=""
-                            />
-                        </a>
-                        <h2 className="text-2xl font-semibold text-gray-700 dark:text-white pl-4">Next.js Base</h2>
+                        <Link href="/">
+                            <a className="grid grid-flow-col auto-cols-max">
+                                <span className="sr-only">Workflow</span>
+                                <img
+                                    className="h-8 w-auto sm:h-10"
+                                    src="logo.svg"
+                                    alt=""
+                                />
+                                <h2 className="h-full pt-1 text-2xl font-semibold text-gray-700 dark:text-white pl-4">Base</h2>
+                            </a>
+                        </Link>
                     </div>
                     <p className="text-base text-gray-400 dark:text-gray-200">Welcome! Please provide your info.</p>
                     <div className="flex items-center justify-between mt-2">
@@ -58,7 +60,7 @@ const Register = () => {
                             {renderButton("Login")}
                         </div>
                     </form>
-                    
+
                     <div className="flex items-center justify-between mt-2">
                         <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                         <span className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"><Link href="/login"> or login </Link></span>

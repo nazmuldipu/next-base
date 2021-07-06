@@ -1,12 +1,21 @@
 import Head from 'next/head'
-// import styles from '../styles/Home.module.css'
-import Navbar from './../components/navbar';
+import AppLayout from '../components/layouts/appLayout';
 
-export default function Home() {
+const Home = () => {
   return (
-    <div>
-      <Navbar />
-      Home page
-    </div>
+      <AppLayout>
+        <Head>
+          <title>Ship | Online ship ticketing</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div>
+
+          <div className="cotainer">
+            <h1>Home index</h1>
+          </div>
+        </div>
+      </AppLayout>
   )
 }
+
+export default Home;

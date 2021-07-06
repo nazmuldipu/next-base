@@ -1,8 +1,24 @@
+import { useEffect } from 'react'
+import Router from 'next/router'
 import Link from 'next/link';
 import Joi from "joi-browser";
 import useForm from '../components/utils/useForm';
+import { useDispatch, useSelector } from "react-redux";
+import { login, getErrorMessage, getToken } from '../store/authSlice';
 
 const Login = () => {
+    const dispatch = useDispatch();
+    const error = useSelector((state) => getErrorMessage(state));
+    const token = useSelector((state) => state.auth.token);
+
+    useEffect(() => {
+        if (!token) {
+            getToken(dispatch)            
+        } else{
+            Router.push(`/dashboard`)
+        }
+    }, [token])
+
     const schema = {
         email: Joi.string().email()
             .required().label("User name or Email"),
@@ -16,8 +32,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateSubmit(e)) {
-            // onSubmit(data);
-            console.log(data);
+            dispatch(login(data));
         }
     };
 
@@ -30,15 +45,17 @@ const Login = () => {
                     </div>
                     <div className="w-full bg-white p-4 md:p-8">
                         <div className="grid grid-flow-col auto-cols-max">
-                            <a href="/" className="inline-block">
-                                <span className="sr-only">Workflow</span>
-                                <img
-                                    className="h-8 w-auto sm:h-10"
-                                    src="logo.svg"
-                                    alt=""
-                                />
-                            </a>
-                            <h2 className="text-2xl font-semibold text-gray-700 dark:text-white pl-4">Next.js Base</h2>
+                            <Link href="/">
+                                <a className="grid grid-flow-col auto-cols-max">
+                                    <span className="sr-only">Workflow</span>
+                                    <img
+                                        className="h-8 w-auto sm:h-10"
+                                        src="logo.svg"
+                                        alt=""
+                                    />
+                                    <h2 className="h-full pt-1 text-2xl font-semibold text-gray-700 dark:text-white pl-4">Base</h2>
+                                </a>
+                            </Link>
                         </div>
                         <p className="text-sm md:text-base text-gray-400 dark:text-gray-200">Welcome back! Please login to your account.</p>
                         <div className="flex items-center justify-between mt-2">
@@ -46,6 +63,7 @@ const Login = () => {
                             <div className="text-base md:text-xl text-center text-gray-900 uppercase dark:text-gray-400">login with email</div>
                             <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
                         </div>
+                        <div className="text-sm font-bold text-red-500">{error}</div>
                         <form onSubmit={handleSubmit}>
                             {renderInput("email", "User name or Email", "email")}
                             {renderInput("password", "Password", "password")}
